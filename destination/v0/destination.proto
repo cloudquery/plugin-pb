@@ -4,7 +4,7 @@ package proto;
 import "plugin-pb/base/v0/base.proto";
 import "google/protobuf/timestamp.proto";
 
-option go_package = "github.com/cloudquery/plugin-pb/pb/destination/v0;destination";
+option go_package = "github.com/cloudquery/plugin-pb-go/pb/destination/v0;destination";
 
 service Destination {
   // Get the current protocol version of the plugin. This helps
