@@ -42,6 +42,7 @@ message Init {
   message Request {
     // marshaled specs.Source
     bytes spec = 1;
+    
   }
   message Response {}
 }
@@ -55,11 +56,12 @@ message GetDynamicTables {
 }
 
 message Sync {
-  message Request {}
+  message Request {
+    google.protobuf.Timestamp sync_time = 1;
+  }
   message Response {
     // marshalled *arrow.Records
     bytes resource = 1;
-    google.protobuf.Timestamp sync_time = 2;
   }
 }
 
