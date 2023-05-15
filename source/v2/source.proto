@@ -1,6 +1,8 @@
 syntax = "proto3";
 package cloudquery.source.v2;
 
+import "google/protobuf/timestamp.proto";
+
 option go_package = "github.com/cloudquery/plugin-pb-go/pb/source/v2;source";
 
 service Source {
@@ -57,6 +59,7 @@ message Sync {
   message Response {
     // marshalled *arrow.Records
     bytes resource = 1;
+    google.protobuf.Timestamp sync_time = 2;
   }
 }
 
