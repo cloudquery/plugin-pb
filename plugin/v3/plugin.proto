@@ -87,7 +87,7 @@ message WriteOptions {
   bool migrate_force = 1;
 }
 
-message MessageCreateTable {
+message MessageMigrateTable {
   // marshalled arrow.Schema
   bytes table = 1;
   bool migrate_force = 2;
@@ -116,7 +116,7 @@ message Sync {
   }
   message Response {
     oneof message {
-      MessageCreateTable create_table = 1;
+      MessageMigrateTable migrate_table = 1;
       MessageInsert insert = 2;
       MessageDeleteStale delete = 3;
     }
@@ -127,7 +127,7 @@ message Write {
   message Request {
     oneof message {
       WriteOptions options = 1;
-      MessageCreateTable create_table = 2;
+      MessageMigrateTable migrate_table = 2;
       MessageInsert insert = 3;
       MessageDeleteStale delete = 4;
     }
