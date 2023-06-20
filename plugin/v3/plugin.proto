@@ -67,6 +67,7 @@ message GetVersion {
 
 message Init {
   message Request {
+    // Internal plugin-specific spec
     bytes spec = 1;
   }
   message Response {}
