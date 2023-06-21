@@ -28,21 +28,6 @@ enum REGISTRY {
   REGISTRY_LOCAL = 2;
 }
 
-enum SCHEDULER {
-  SCHEDULER_DFS = 0;
-  SCHEDULER_ROUND_ROBIN = 1;
-}
-
-enum Operator {
-  EQUAL = 0;
-  LESS_THAN = 1;
-}
-
-enum PK_MODE {
-  DEFAULT = 0;
-  CQ_ID_ONLY = 1;
-}
-
 message StateBackendSpec {
   string name = 1;
   string path = 2;
@@ -111,9 +96,7 @@ message Sync {
   message Request {
     repeated string tables = 1;
     repeated string skip_tables = 2;
-    int64 concurrency = 3;
-    SCHEDULER scheduler = 4;
-    StateBackendSpec state_backend = 5;
+    StateBackendSpec state_backend = 3;
   }
   message Response {
     oneof message {
