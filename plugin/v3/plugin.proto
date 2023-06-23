@@ -96,6 +96,8 @@ message Sync {
     repeated string tables = 1;
     repeated string skip_tables = 2;
     StateBackendSpec state_backend = 3;
+    bool deterministic_cq_id = 4;
+    bool skip_dependent_tables = 5;
   }
   message Response {
     oneof message {
