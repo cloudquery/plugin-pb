@@ -109,6 +109,8 @@ message Sync {
 message Write {
   message Request {
     oneof message {
+      // WriteOptions is only used for the first message
+      // to configure the write stream
       WriteOptions options = 1;
       MessageMigrateTable migrate_table = 2;
       MessageInsert insert = 3;
