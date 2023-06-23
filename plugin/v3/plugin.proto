@@ -14,9 +14,9 @@ service Plugin {
   rpc Init(Init.Request) returns (Init.Response);
   // Get all tables the source plugin supports. Must be called after Init
   rpc GetTables(GetTables.Request) returns (GetTables.Response);
-  // Start the sync the source plugin
+  // Start a sync on the source plugin. It streams messages as output.
   rpc Sync(Sync.Request) returns (stream Sync.Response);
-  // Write resources
+  // Write resources. Write is the mirror of Sync, expecting a stream of messages as input.
   rpc Write(stream Write.Request) returns (Write.Response);
   // Send signal to flush and close open connections
   rpc Close(Close.Request) returns (Close.Response);
