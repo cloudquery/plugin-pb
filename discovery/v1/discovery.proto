@@ -11,6 +11,6 @@ service Discovery {
 message GetVersions {
   message Request {}
   message Response {
-    repeated uint64 versions = 1;
+    repeated int32 versions = 1;
   }
 }
