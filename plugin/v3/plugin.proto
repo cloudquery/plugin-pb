@@ -22,21 +22,6 @@ service Plugin {
   rpc Close(Close.Request) returns (Close.Response);
 }
 
-enum Registry {
-  REGISTRY_UNSPECIFIED = 0;
-  REGISTRY_GITHUB = 1;
-  REGISTRY_GRPC = 2;
-  REGISTRY_LOCAL = 3;
-}
-
-message StateBackendSpec {
-  string name = 1;
-  string path = 2;
-  string version = 3;
-  Registry registry = 4;
-  bytes spec = 5;
-}
-
 message GetName {
   message Request {}
   message Response {
@@ -95,9 +80,8 @@ message Sync {
   message Request {
     repeated string tables = 1;
     repeated string skip_tables = 2;
-    StateBackendSpec state_backend = 3;
+    bool skip_dependent_tables = 3;
     bool deterministic_cq_id = 4;
-    bool skip_dependent_tables = 5;
   }
   message Response {
     oneof message {
