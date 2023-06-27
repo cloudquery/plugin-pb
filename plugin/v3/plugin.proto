@@ -55,9 +55,7 @@ message GetTables {
   }
 }
 
-message WriteOptions {
-  bool migrate_force = 1;
-}
+message WriteOptions {}
 
 message MessageMigrateTable {
   // marshalled arrow.Schema
