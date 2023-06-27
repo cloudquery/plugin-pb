@@ -95,9 +95,9 @@ message Write {
   }
   message Request {
     oneof message {
-      Write.MessageMigrateTable migrate_table = 2;
-      Write.MessageInsert insert = 3;
-      Write.MessageDeleteStale delete = 4;
+      Write.MessageMigrateTable migrate_table = 1;
+      Write.MessageInsert insert = 2;
+      Write.MessageDeleteStale delete = 3;
     }
   }
   message Response {}
