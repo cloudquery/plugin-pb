@@ -82,6 +82,7 @@ message Write {
   message MessageMigrateTable {
     // marshalled arrow.Schema
     bytes table = 1;
+    bool migrate_force = 2;
   }
   message MessageInsert {
     // marshalled arrow.Record
