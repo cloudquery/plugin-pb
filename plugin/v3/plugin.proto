@@ -55,26 +55,15 @@ message GetTables {
   }
 }
 
-message WriteOptions {}
-
-message MessageMigrateTable {
-  // marshalled arrow.Schema
-  bytes table = 1;
-}
-
-message MessageInsert {
-  // marshalled arrow.Record
-  bytes record = 1;
-}
-
-message MessageDeleteStale {
-  // marshalled arrow.Schema
-  bytes table = 1;
-  string source_name = 2;
-  google.protobuf.Timestamp sync_time = 3;
-}
-
 message Sync {
+  message MessageInsert {
+    // marshalled arrow.Record
+    bytes record = 1;
+  }
+  message MessageMigrateTable {
+    // marshalled arrow.Schema
+    bytes table = 1;
+  }
   message Request {
     repeated string tables = 1;
     repeated string skip_tables = 2;
@@ -83,22 +72,32 @@ message Sync {
   }
   message Response {
     oneof message {
-      MessageMigrateTable migrate_table = 1;
-      MessageInsert insert = 2;
-      MessageDeleteStale delete = 3;
+      Sync.MessageMigrateTable migrate_table = 1;
+      Sync.MessageInsert insert = 2;
     }
   }
 }
 
 message Write {
+  message MessageMigrateTable {
+    // marshalled arrow.Schema
+    bytes table = 1;
+  }
+  message MessageInsert {
+    // marshalled arrow.Record
+    bytes record = 1;
+  }
+  message MessageDeleteStale {
+    // marshalled arrow.Schema
+    bytes table = 1;
+    string source_name = 2;
+    google.protobuf.Timestamp sync_time = 3;
+  }
   message Request {
     oneof message {
-      // WriteOptions is only used for the first message
-      // to configure the write stream
-      WriteOptions options = 1;
-      MessageMigrateTable migrate_table = 2;
-      MessageInsert insert = 3;
-      MessageDeleteStale delete = 4;
+      Write.MessageMigrateTable migrate_table = 2;
+      Write.MessageInsert insert = 3;
+      Write.MessageDeleteStale delete = 4;
     }
   }
   message Response {}
