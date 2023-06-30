@@ -16,6 +16,9 @@ service Plugin {
   rpc GetTables(GetTables.Request) returns (GetTables.Response);
   // Start a sync on the source plugin. It streams messages as output.
   rpc Sync(Sync.Request) returns (stream Sync.Response);
+  // Start a Read on the source plugin for a given table and schema. It streams messages as output.
+  // The plugin assume that that schema was used to also write the data beforehand
+  rpc Read(Read.Request) returns (stream Read.Response);
   // Write resources. Write is the mirror of Sync, expecting a stream of messages as input.
   rpc Write(stream Write.Request) returns (Write.Response);
   // Send signal to flush and close open connections
@@ -75,6 +78,17 @@ message Sync {
       Sync.MessageMigrateTable migrate_table = 1;
       Sync.MessageInsert insert = 2;
     }
+  }
+}
+
+message Read {
+  message Request {
+    // marshalled arrow.Schema
+    bytes table = 1;
+  }
+  message Response {
+    // marshalled arrow.Record
+    bytes record = 1;
   }
 }
 
