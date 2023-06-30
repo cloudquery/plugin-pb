@@ -90,9 +90,10 @@ message Write {
   }
   message MessageDeleteStale {
     // marshalled arrow.Schema
-    bytes table = 1;
+    bytes table = 1 [deprecated = true];
     string source_name = 2;
     google.protobuf.Timestamp sync_time = 3;
+    string table_name = 4;
   }
   message Request {
     oneof message {
