@@ -71,7 +71,7 @@ message Sync {
     // table name to use for state backend
     string table_name = 1;
     // connection path to use for state backend
-    string path = 2;
+    string connection = 2;
   }
   message Request {
     repeated string tables = 1;
