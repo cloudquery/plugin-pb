@@ -67,11 +67,18 @@ message Sync {
     // marshalled arrow.Schema
     bytes table = 1;
   }
+  message BackendOptions {
+    // table name to use for state backend
+    string table_name = 1;
+    // connection path to use for state backend
+    string connection = 2;
+  }
   message Request {
     repeated string tables = 1;
     repeated string skip_tables = 2;
     bool skip_dependent_tables = 3;
     bool deterministic_cq_id = 4;
+    BackendOptions backend = 5;
   }
   message Response {
     oneof message {
