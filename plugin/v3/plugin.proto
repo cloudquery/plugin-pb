@@ -43,6 +43,7 @@ message Init {
   message Request {
     // Internal plugin-specific spec
     bytes spec = 1;
+    bool no_connection = 2;
   }
   message Response {}
 }
