@@ -41,8 +41,8 @@ message GetVersion {
 
 message Init {
   message Request {
-    // Internal plugin-specific spec
-    bytes spec = 1;
+    bytes spec = 1; // Internal plugin-specific spec
+    bool no_connection = 2; // A flag to indicate plugins should skip establishing a connection
   }
   message Response {}
 }
