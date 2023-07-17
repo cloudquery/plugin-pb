@@ -1,0 +1,22 @@
+name: Trigger plugin-pb-go code generation
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  trigger-gen:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Trigger plugin-pb-go code generation
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GH_CQ_BOT }}
+          script: |
+            github.rest.actions.createWorkflowDispatch({
+              owner: 'cloudquery',
+              repo: 'plugin-pb-go',
+              workflow_id: 'regen.yml',
+              ref: 'main',
+            })
