@@ -31,3 +31,25 @@ jobs:
               workflow_id: 'regen.yml',
               ref: 'main',
             })
+      - name: Trigger plugin-pb-java code generation
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GH_CQ_BOT }}
+          script: |
+            github.rest.actions.createWorkflowDispatch({
+              owner: 'cloudquery',
+              repo: 'plugin-pb-java',
+              workflow_id: 'regen.yml',
+              ref: 'main',
+            })
+      - name: Trigger plugin-pb-javascript code generation
+        uses: actions/github-script@v6
+        with:
+          github-token: ${{ secrets.GH_CQ_BOT }}
+          script: |
+            github.rest.actions.createWorkflowDispatch({
+              owner: 'cloudquery',
+              repo: 'plugin-pb-javascript',
+              workflow_id: 'regen.yml',
+              ref: 'main',
+            })
