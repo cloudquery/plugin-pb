@@ -70,6 +70,12 @@ message Sync {
     // marshalled arrow.Schema
     bytes table = 1;
   }
+  message MessageDeleteRecord {
+    string table_name = 1;
+    map<string, bytes> deletion_keys = 2;
+    repeated TableRelation table_relations = 3;
+  }
+
   message BackendOptions {
     // table name to use for state backend
     string table_name = 1;
@@ -87,6 +93,7 @@ message Sync {
     oneof message {
       Sync.MessageMigrateTable migrate_table = 1;
       Sync.MessageInsert insert = 2;
+      Sync.MessageDeleteRecord delete = 3;
     }
   }
 }
@@ -100,6 +107,11 @@ message Read {
     // marshalled arrow.Record
     bytes record = 1;
   }
+}
+
+message TableRelation {
+  string table_name = 1;
+  string parent_table = 2;
 }
 
 message Write {
@@ -119,11 +131,17 @@ message Write {
     google.protobuf.Timestamp sync_time = 3;
     string table_name = 4;
   }
+  message MessageDeleteRecord {
+    string table_name = 1;
+    map<string, bytes> deletion_keys = 2;
+    repeated TableRelation table_relations = 3;
+  }
   message Request {
     oneof message {
       Write.MessageMigrateTable migrate_table = 1;
       Write.MessageInsert insert = 2;
       Write.MessageDeleteStale delete = 3;
+      Write.MessageDeleteRecord delete_record = 4; 
     }
   }
   message Response {}
