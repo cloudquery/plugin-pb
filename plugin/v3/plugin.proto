@@ -93,7 +93,7 @@ message Sync {
     oneof message {
       Sync.MessageMigrateTable migrate_table = 1;
       Sync.MessageInsert insert = 2;
-      Sync.MessageDeleteRecord delete = 3;
+      Sync.MessageDeleteRecord delete_record = 3;
     }
   }
 }
