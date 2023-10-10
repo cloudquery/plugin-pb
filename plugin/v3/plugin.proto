@@ -72,7 +72,7 @@ message Sync {
   }
   message MessageDeleteRecord {
     string table_name = 1;
-    map<string, bytes> deletion_keys = 2;
+    repeated WhereClause where_clauses = 2;
     repeated TableRelation table_relations = 3;
   }
 
@@ -114,6 +114,28 @@ message TableRelation {
   string parent_table = 2;
 }
 
+
+
+message Predicate {
+  enum Operator {
+    EQ = 0;
+    // LT = 1;
+    // LTE = 2;
+    // GT = 3;  
+    // GTE = 4;
+  }
+
+  Operator operator = 1;
+  string column = 2;
+  // marshalled arrow.Record
+  bytes record = 3;
+}
+
+message WhereClause {
+  repeated WhereClause and = 1;
+  repeated WhereClause or = 2;
+}
+
 message Write {
   message MessageMigrateTable {
     // marshalled arrow.Schema
@@ -133,7 +155,7 @@ message Write {
   }
   message MessageDeleteRecord {
     string table_name = 1;
-    map<string, bytes> deletion_keys = 2;
+    repeated WhereClause where_clauses = 2;
     repeated TableRelation table_relations = 3;
   }
   message Request {
