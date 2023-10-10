@@ -132,8 +132,8 @@ message Predicate {
 }
 
 message WhereClause {
-  repeated WhereClause and = 1;
-  repeated WhereClause or = 2;
+  repeated Predicate and = 1;
+  repeated Predicate or = 2;
 }
 
 message Write {
