@@ -72,7 +72,7 @@ message Sync {
   }
   message MessageDeleteRecord {
     string table_name = 1;
-    repeated WhereClause where_clauses = 2;
+    WhereClause where_clause = 2;
     repeated TableRelation table_relations = 3;
   }
 
@@ -155,7 +155,7 @@ message Write {
   }
   message MessageDeleteRecord {
     string table_name = 1;
-    repeated WhereClause where_clauses = 2;
+    WhereClause where_clause = 2;
     repeated TableRelation table_relations = 3;
   }
   message Request {
