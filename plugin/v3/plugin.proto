@@ -72,7 +72,7 @@ message Sync {
   }
   message MessageDeleteRecord {
     string table_name = 1;
-    WhereClause where_clause = 2;
+    repeated PredicatesGroup where_clause = 2;
     repeated TableRelation table_relations = 3;
   }
 
@@ -131,9 +131,14 @@ message Predicate {
   bytes record = 3;
 }
 
-message WhereClause {
-  repeated Predicate and = 1;
-  repeated Predicate or = 2;
+message PredicatesGroup {
+  enum GroupingType {
+    AND = 0;
+    OR = 1;
+  }
+  GroupingType grouping_type = 1;
+	repeated Predicate predicates = 2;
+
 }
 
 message Write {
@@ -155,7 +160,7 @@ message Write {
   }
   message MessageDeleteRecord {
     string table_name = 1;
-    WhereClause where_clause = 2;
+    repeated PredicatesGroup where_clause = 2;
     repeated TableRelation table_relations = 3;
   }
   message Request {
