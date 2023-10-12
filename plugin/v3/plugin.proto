@@ -133,3 +133,48 @@ message Close {
   message Request {}
   message Response {}
 }
+
+message Expression {
+  oneof expression {
+    UnaryExpression unary_expression = 1;
+    BinaryExpression binary_expression = 2;
+  }
+}
+
+message UnaryExpression {
+  oneof expression {
+    ExpressionValue value = 1;
+    Expression not = 2;
+  }
+}
+
+message ExpressionValue {
+  oneof value {
+    string column = 1;
+    bytes data = 2;
+  }
+}
+
+message BinaryExpression {
+  BinaryOp op = 1;
+  Expression left = 2;
+  Expression right = 3;
+}
+
+message BinaryOp {
+  enum BooleanOp {
+    AND = 0;
+    OR = 1;
+  };
+  enum ComparisonOp {
+    EQ = 0;
+    LT = 1;
+    LTE = 2;
+    GT = 3;
+    GTE = 4;
+  };
+  oneof op {
+    BooleanOp boolean = 1;
+    ComparisonOp cmp = 1;
+  }
+}
