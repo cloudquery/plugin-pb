@@ -12,7 +12,7 @@ service Plugin {
   rpc GetName(GetName.Request) returns (GetName.Response);
   // Get the current version of the plugin
   rpc GetVersion(GetVersion.Request) returns (GetVersion.Response);
-  // Get plugin own (nested) spec schema.
+  // Get plugin spec schema.
   // This will allow validating the input even before calling Init.
   // Should be called before Init.
   rpc GetSpecSchema(GetSpecSchema.Request) returns (GetSpecSchema.Response);
@@ -48,7 +48,7 @@ message GetVersion {
 message GetSpecSchema {
   message Request {}
   message Response {
-    // Should be a valid JSON schema for the plugin own (nested) spec.
+    // Should be a valid JSON schema for the plugin spec.
     // See https://json-schema.org for more details.
     optional bytes json_schema = 1;
   }
