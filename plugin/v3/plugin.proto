@@ -50,7 +50,7 @@ message GetSpecSchema {
   message Response {
     // Should be a valid JSON schema for the plugin spec.
     // See https://json-schema.org for more details.
-    optional bytes json_schema = 1;
+    optional string json_schema = 1;
   }
 }
 
