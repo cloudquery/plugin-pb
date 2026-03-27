@@ -15,7 +15,8 @@ jobs:
         with:
           app-id: ${{ secrets.CQ_APP_ID }}
           private-key: ${{ secrets.CQ_APP_PRIVATE_KEY }}
-          permission-contents: write
+          permission-actions: write
+          repositories: plugin-pb-go,plugin-pb-python,plugin-pb-java,plugin-pb-javascript
       - name: Trigger plugin-pb-go code generation
         uses: actions/github-script@v6
         with:
