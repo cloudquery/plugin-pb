@@ -9,10 +9,22 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      - name: Generate GitHub App token
+        id: app-token
+        uses: actions/create-github-app-token@f8d387b68d61c58ab83c6c016672934102569859 # v3
+        with:
+          app-id: ${{ secrets.CQ_APP_ID }}
+          private-key: ${{ secrets.CQ_APP_PRIVATE_KEY }}
+          permission-actions: write
+          repositories: |
+            plugin-pb-go
+            plugin-pb-python
+            plugin-pb-java
+            plugin-pb-javascript
       - name: Trigger plugin-pb-go code generation
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.GH_CQ_BOT }}
+          github-token: ${{ steps.app-token.outputs.token }}
           script: |
             github.rest.actions.createWorkflowDispatch({
               owner: 'cloudquery',
@@ -23,7 +35,7 @@ jobs:
       - name: Trigger plugin-pb-python code generation
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.GH_CQ_BOT }}
+          github-token: ${{ steps.app-token.outputs.token }}
           script: |
             github.rest.actions.createWorkflowDispatch({
               owner: 'cloudquery',
@@ -34,7 +46,7 @@ jobs:
       - name: Trigger plugin-pb-java code generation
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.GH_CQ_BOT }}
+          github-token: ${{ steps.app-token.outputs.token }}
           script: |
             github.rest.actions.createWorkflowDispatch({
               owner: 'cloudquery',
@@ -45,7 +57,7 @@ jobs:
       - name: Trigger plugin-pb-javascript code generation
         uses: actions/github-script@v6
         with:
-          github-token: ${{ secrets.GH_CQ_BOT }}
+          github-token: ${{ steps.app-token.outputs.token }}
           script: |
             github.rest.actions.createWorkflowDispatch({
               owner: 'cloudquery',
