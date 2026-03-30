@@ -22,7 +22,7 @@ jobs:
             plugin-pb-java
             plugin-pb-javascript
       - name: Trigger plugin-pb-go code generation
-        uses: actions/github-script@v6
+        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6
         with:
           github-token: ${{ steps.app-token.outputs.token }}
           script: |
@@ -33,7 +33,7 @@ jobs:
               ref: 'main',
             })
       - name: Trigger plugin-pb-python code generation
-        uses: actions/github-script@v6
+        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6
         with:
           github-token: ${{ steps.app-token.outputs.token }}
           script: |
@@ -44,7 +44,7 @@ jobs:
               ref: 'main',
             })
       - name: Trigger plugin-pb-java code generation
-        uses: actions/github-script@v6
+        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6
         with:
           github-token: ${{ steps.app-token.outputs.token }}
           script: |
@@ -55,7 +55,7 @@ jobs:
               ref: 'main',
             })
       - name: Trigger plugin-pb-javascript code generation
-        uses: actions/github-script@v6
+        uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6
         with:
           github-token: ${{ steps.app-token.outputs.token }}
           script: |
