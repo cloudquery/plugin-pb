@@ -35,6 +35,15 @@ service Plugin {
   rpc Close(Close.Request) returns (Close.Response);
   // Validate and test the connections used by the plugin
   rpc TestConnection(TestConnection.Request) returns (TestConnection.Response);
+  // Watch for changes to resources. Bidirectional stream: the client sends Start,
+  // the server replies Ready, the client sends Position, the server streams Changes.
+  // Plugins that do not support it return Unimplemented.
+  rpc Watch(stream Watch.Request) returns (stream Watch.Response);
+}
+
+enum Op {
+  OP_UPSERT = 0;
+  OP_DELETE = 1;
 }
 
 message GetName {
@@ -107,6 +116,12 @@ message Sync {
     // connection path to use for state backend
     string connection = 2;
   }
+  message Resource {
+    string table = 1;
+    // marshalled arrow.Record, one row, columns = the table's primary keys
+    bytes keys = 2;
+    Op op = 3;
+  }
   message Request {
     message Shard {
       int32 num = 1;
@@ -119,6 +134,9 @@ message Sync {
     BackendOptions backend = 5;
     optional Shard shard = 6;
     bool withErrorMessages = 7; // If true, the plugin will send error messages in the response stream
+    // When set: fetch only these resources. Emit Insert for found, DeleteRecord for missing or OP_DELETE.
+    // Do not emit MigrateTable. `tables` is ignored.
+    repeated Resource refresh = 8;
   }
   message Response {
     oneof message {
@@ -126,6 +144,53 @@ message Sync {
       Sync.MessageInsert insert = 2;
       Sync.MessageDeleteRecord delete_record = 3;
       Sync.MessageError error = 4;
+    }
+  }
+}
+
+message Watch {
+  message Start {
+    repeated string tables = 1;
+    repeated string skip_tables = 2;
+    Sync.BackendOptions backend = 3;
+    optional Sync.Request.Shard shard = 4;
+    // If true, the server sends Drained and closes the stream once the sources are caught up.
+    bool drain = 5;
+  }
+  message Position {
+    // unset = resume from checkpoint
+    optional google.protobuf.Timestamp since = 1;
+  }
+  message Ack {
+    // acknowledges all changes up to and including this event
+    string event_id = 1;
+  }
+  message Request {
+    oneof message {
+      Watch.Start start = 1;
+      Watch.Position position = 2;
+      Watch.Ack ack = 3;
+    }
+  }
+
+  message Ready {
+    bool has_checkpoint = 1;
+    google.protobuf.Timestamp checkpoint_time = 2;
+  }
+  message Change {
+    string table = 1;
+    // marshalled arrow.Record, as Sync.Resource.keys
+    bytes keys = 2;
+    Op op = 3;
+    string event_id = 4;
+    google.protobuf.Timestamp time = 5;
+  }
+  message Drained {}
+  message Response {
+    oneof message {
+      Watch.Ready ready = 1;
+      Watch.Change change = 2;
+      Watch.Drained drained = 3;
     }
   }
 }
