@@ -38,6 +38,10 @@ service Plugin {
   // Assess how the destination plugin would apply table schema changes, without writing anything.
   // Plugins that do not support assessment return Unimplemented.
   rpc AssessTables(AssessTables.Request) returns (AssessTables.Response);
+  // Write resources, like Write, and also accept Write.MessageFlush.
+  // The plugin sends one Write.Response per Write.MessageFlush, once every message sent before the flush is committed.
+  // Only use it with plugins that set Init.Response.supports_flush.
+  rpc WriteStream(stream Write.Request) returns (stream Write.Response);
 }
 
 message GetName {
@@ -69,7 +73,10 @@ message Init {
     bool no_connection = 2; // A flag to indicate plugins should skip establishing a connection
     string invocation_id = 3; // unique execution_id that will identify the invocation (sync, migrate etc)
   }
-  message Response {}
+  message Response {
+    // The plugin supports WriteStream and Write.MessageFlush
+    bool supports_flush = 1;
+  }
 }
 
 message GetTables {
@@ -102,6 +109,12 @@ message Sync {
     string table_name = 1;
     string error = 2;
   }
+  // State backend rows (key, value, version) to persist once every message sent before the checkpoint is committed to all destinations.
+  // Only sent when Sync.Request.supports_checkpoints is set.
+  message MessageCheckpoint {
+    // marshalled arrow.Record
+    bytes record = 1;
+  }
 
 
   message BackendOptions {
@@ -122,6 +135,9 @@ message Sync {
     BackendOptions backend = 5;
     optional Shard shard = 6;
     bool withErrorMessages = 7; // If true, the plugin will send error messages in the response stream
+    // If true, the client persists state backend writes from Sync.MessageCheckpoint,
+    // so the plugin sends them on the stream instead of writing to the state backend
+    bool supports_checkpoints = 8;
   }
   message Response {
     oneof message {
@@ -129,6 +145,7 @@ message Sync {
       Sync.MessageInsert insert = 2;
       Sync.MessageDeleteRecord delete_record = 3;
       Sync.MessageError error = 4;
+      Sync.MessageCheckpoint checkpoint = 5;
     }
   }
 }
@@ -198,15 +215,23 @@ message Write {
     repeated PredicatesGroup where_clause = 2;
     repeated TableRelation table_relations = 3;
   }
+  // Commit every message sent before this one. Only valid on WriteStream.
+  message MessageFlush {
+    uint64 id = 1;
+  }
   message Request {
     oneof message {
       Write.MessageMigrateTable migrate_table = 1;
       Write.MessageInsert insert = 2;
       Write.MessageDeleteStale delete = 3;
-      Write.MessageDeleteRecord delete_record = 4; 
+      Write.MessageDeleteRecord delete_record = 4;
+      Write.MessageFlush flush = 5;
     }
   }
-  message Response {}
+  message Response {
+    // WriteStream only: id of the Write.MessageFlush that completed
+    uint64 flush_id = 1;
+  }
 }
 
 message Transform {
