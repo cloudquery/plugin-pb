@@ -39,7 +39,8 @@ service Plugin {
   // Plugins that do not support assessment return Unimplemented.
   rpc AssessTables(AssessTables.Request) returns (AssessTables.Response);
   // Write resources, like Write, and also accept Write.MessageFlush.
-  // The plugin sends one Write.Response per Write.MessageFlush, once every message sent before the flush is committed.
+  // The plugin sends one Write.Response per Write.MessageFlush, once every message sent before the flush is committed,
+  // or with Write.Response.flush_error set if some of them could not be committed.
   // Only use it with plugins that set Init.Response.supports_flush.
   rpc WriteStream(stream Write.Request) returns (stream Write.Response);
 }
@@ -238,6 +239,8 @@ message Write {
   message Response {
     // WriteStream only: id of the Write.MessageFlush that completed
     uint64 flush_id = 1;
+    // WriteStream only: why some messages sent before the flush could not be committed. The stream stays open.
+    string flush_error = 2;
   }
 }
 
