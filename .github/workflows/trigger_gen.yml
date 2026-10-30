@@ -4,6 +4,9 @@ on:
     branches:
       - main
 
+permissions:
+  contents: read
+
 jobs:
   trigger-gen:
     runs-on: ubuntu-latest
